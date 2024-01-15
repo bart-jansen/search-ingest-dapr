@@ -43,7 +43,7 @@ def delete_blobs_with_prefix(container_client, prefix):
     print(f"🗑️ Deleted {blob_count} blobs with prefix {prefix}", flush=True)
 
 
-def cleanup_blob(status, blob_container_name, searchitems_folder_path, destination_folder_path):
+def cleanup_blob(status, blob_container_name, searchitems_folder_path):
     print("Indexing completed with status:", status.last_result.status)
 
     blob_service_client = BlobServiceClient.from_connection_string(azure_blob_connection_string)
@@ -51,11 +51,10 @@ def cleanup_blob(status, blob_container_name, searchitems_folder_path, destinati
     
     print("Indexer completed. Deleting all blobs now..", flush=True)
     delete_blobs_with_prefix(container_client, searchitems_folder_path)
-    delete_blobs_with_prefix(container_client, destination_folder_path)
 
     print("🏁🏁🏁Successfully indexed and cleaned up.", flush=True)
 
-def start_indexer(blob_container_name, destination_folder_path, searchitems_folder_path, searchindexer_name):
+def start_indexer(blob_container_name, searchitems_folder_path, searchindexer_name):
     # Create an instance of AzureSearchIndex
     azure_search_index = AzureSearchIndex(
         service_name = search_service, 
@@ -71,7 +70,7 @@ def start_indexer(blob_container_name, destination_folder_path, searchitems_fold
     azure_search_index.create_indexer(searchindexer_name, f"{searchindexer_name}-ds", f"{searchindexer_name}-index")
 
     def cleanup_blob_wrapper(status):
-        cleanup_blob(status, blob_container_name, searchitems_folder_path, destination_folder_path)
+        cleanup_blob(status, blob_container_name, searchitems_folder_path)
 
     azure_search_index.run_indexer(searchindexer_name, cleanup_blob_wrapper)
 
@@ -121,7 +120,6 @@ def document_completed_subscriber():
         # start indexer
         start_indexer(
             blob_container_name, 
-            ingestion_data['destination_folder_path'], 
             ingestion_data['searchitems_folder_path'], 
             ingestion_data['searchindexer_name']
         )

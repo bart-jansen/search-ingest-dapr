@@ -17,7 +17,6 @@ components=(
     "batcher"
     "document_completed"
     "enrichment_completed"
-    "extract_document"
     "generate_embeddings"
     "generate_keyphrases"
     "generate_summaries"

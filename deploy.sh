@@ -16,7 +16,7 @@ echo "### Building and pushing Docker images"
 $script_dir/scripts/docker-build-and-push.sh
 
 echo "### Generating manifests"
-$script_dir/scripts/create-env-files-from-output.sh
+$script_dir/scripts/create-env-files-from-secrets.sh
 
 echo "### Getting kubectl credentials"
 $script_dir/scripts/get-kube-login.sh

@@ -24,12 +24,11 @@ Once open as a dev container:
 ```bash
 curl -X POST http://127.0.0.1:6000/batcher-trigger \
      -H "Content-Type: application/json" \
-     -d '{"source_folder_path": "PDFs/", "destination_folder_path": "uploadedPDFs/", "searchitems_folder_path": "searchIndexItems/", "searchindexer_name": "daprdemotest"}'
+     -d '{"source_folder_path": "PDFs/", "searchitems_folder_path": "searchIndexItems/", "searchindexer_name": "daprdemotest"}'
 ```
 
 With the following ingestion parameters:
 - `source_folder_path` - the folder in above container to source PDFs from 
-- `destination_folder_path` - the destination folder where source PDFs are temporarily stored for ingestion
 - `searchitems_folder_path` - the path in above container where SearchIndexItems are stored, as configured in your Azure AI Search DataSource
 - `searchindexer_name` - the name of the search indexer to use. This will be created if it doesn't exist yet
 
@@ -40,3 +39,8 @@ With the following ingestion parameters:
 When running, logs for each service are written to a `.dapr` folder under each service folder.
 These can be cleaned up by running `find . -name ".dapr" | xargs rm -rf` from the root of the project.
 
+## Delete k8s deployment
+
+When you're switching around between local development and production, you might want to temporarily delete your k8s deployment since these pods are described to the same pubsub, picking up new messages.
+
+To delete your deployment, run `./scripts/delete-k8s.sh`. Once you're ready testing, simply run `./scripts/deploy-to-k8s.sh` again to deploy to your k8s cluster.

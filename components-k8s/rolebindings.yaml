@@ -31,9 +31,6 @@ subjects:
   name: enrichment-completed
   namespace: default
 - kind: ServiceAccount
-  name: extract-document
-  namespace: default
-- kind: ServiceAccount
   name: generate-embeddings
   namespace: default
 - kind: ServiceAccount

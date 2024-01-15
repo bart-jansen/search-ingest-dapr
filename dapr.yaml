@@ -8,44 +8,38 @@ apps:
     command: ["uvicorn", "app:app"]
     configFilePath: ../../components-local/daprConfig.yaml
 
-  - appID: extract-document
-    appDirPath: src/extract_document
-    appPort: 6001
-    command: ["uvicorn", "app:app"]
-    configFilePath: ../../components-local/daprConfig.yaml
-
   - appID: process-document
     appDirPath: src/process_document
-    appPort: 6002
+    appPort: 6001
     command: ["uvicorn", "app:app"]
     configFilePath: ../../components-local/daprConfig.yaml
 
   - appID: generate-embeddings
     appDirPath: src/generate_embeddings
-    appPort: 6003
+    appPort: 6002
     command: ["uvicorn", "app:app"]
     configFilePath: ../../components-local/daprConfig.yaml
 
   - appID: generate-keyphrases
     appDirPath: src/generate_keyphrases
-    appPort: 6004
+    appPort: 6003
     command: ["uvicorn", "app:app"]
     configFilePath: ../../components-local/daprConfig.yaml
 
   - appID: generate-summaries
     appDirPath: src/generate_summaries
-    appPort: 6005
+    appPort: 6004
     command: ["uvicorn", "app:app"]
     configFilePath: ../../components-local/daprConfig.yaml
 
   - appID: enrichment-completed
     appDirPath: src/enrichment_completed
-    appPort: 6006
+    appPort: 6005
     command: ["uvicorn", "app:app"]
     configFilePath: ../../components-local/daprConfig.yaml
 
   - appID: document-completed
     appDirPath: src/document_completed
-    appPort: 6007
+    appPort: 6006
     command: ["uvicorn", "app:app"]
     configFilePath: ../../components-local/daprConfig.yaml

@@ -192,11 +192,10 @@ def subscribe():
 @app.route("/process-document", methods=["POST"])
 def process_page_subscriber():
     event = from_http(request.headers, request.get_data())
-    data = json.loads(event.data)
 
-    ingestion_id = data["ingestion_id"]
-    doc_id = data["doc_id"]
-    blob_name = data["blob_name"]
+    ingestion_id = event.data["ingestion_id"]
+    doc_id = event.data["doc_id"]
+    blob_name = event.data["blob_name"]
     
     print(f"Received filename: {blob_name} with document ID: {doc_id}", flush=True)
 
