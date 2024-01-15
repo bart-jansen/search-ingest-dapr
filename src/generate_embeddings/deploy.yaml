@@ -17,7 +17,7 @@ spec:
         # https://docs.dapr.io/reference/arguments-annotations-overview/
         dapr.io/enabled: "true"
         dapr.io/app-id: "generate-embeddings"
-        dapr.io/app-port: "6003"
+        dapr.io/app-port: "6002"
         dapr.io/config: "appconfig"
         dapr.io/enable-api-logging: "true"
         dapr.io/log-as-json: "true"
@@ -32,9 +32,9 @@ spec:
         image: $REGISTRY_NAME/generate_embeddings:latest
         env:
         - name: APP_PORT
-          value: "6003"
+          value: "6002"
         ports:
-        - containerPort: 6003
+        - containerPort: 6002
         imagePullPolicy: Always
 ---
 apiVersion: v1

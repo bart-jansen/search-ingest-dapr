@@ -8,7 +8,7 @@ import os
 
 dapr_client = DaprClient()
 app = Flask(__name__)
-app_port = os.getenv("APP_PORT", "6006")
+app_port = os.getenv("APP_PORT", "6005")
 
 source_topic = "enrichment-completed"
 pubsub_name = "pubsub"

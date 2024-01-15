@@ -1,5 +1,4 @@
 import math
-import time
 from flask import Flask, request, jsonify
 from cloudevents.http import from_http
 from dapr.clients import DaprClient
@@ -7,13 +6,12 @@ import json
 import os
 import html
 from azure.storage.blob import BlobServiceClient
-from pypdf import PdfReader, PdfWriter
 from azure.ai.formrecognizer import DocumentAnalysisClient
 from azure.core.credentials import AzureKeyCredential
 
 dapr_client = DaprClient()
 app = Flask(__name__)
-app_port = os.getenv("APP_PORT", "6002")
+app_port = os.getenv("APP_PORT", "6001")
 
 source_topic = "process-document"
 secret_store = "secretstore"

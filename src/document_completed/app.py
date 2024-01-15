@@ -8,10 +8,9 @@ from azure.storage.blob import BlobServiceClient
 from cloudevents.http import from_http
 from dapr.clients import DaprClient, DaprInternalError
 
-
 dapr_client = DaprClient()
 app = Flask(__name__)
-app_port = os.getenv("APP_PORT", "6007")
+app_port = os.getenv("APP_PORT", "6006")
 
 source_topic = "document-completed"
 pubsub_name = "pubsub"

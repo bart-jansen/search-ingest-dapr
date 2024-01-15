@@ -7,10 +7,9 @@ import openai
 import time
 from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_exception_type
 
-
 dapr_client = DaprClient()
 app = Flask(__name__)
-app_port = os.getenv("APP_PORT", "6003")
+app_port = os.getenv("APP_PORT", "6002")
 
 source_topic = "generate-embeddings"
 destination_topic = "messages"

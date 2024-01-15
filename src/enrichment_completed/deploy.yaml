@@ -17,7 +17,7 @@ spec:
         # https://docs.dapr.io/reference/arguments-annotations-overview/
         dapr.io/enabled: "true"
         dapr.io/app-id: "enrichment-completed"
-        dapr.io/app-port: "6006"
+        dapr.io/app-port: "6005"
         dapr.io/config: "appconfig"
         dapr.io/enable-api-logging: "true"
         dapr.io/log-as-json: "true"
@@ -32,9 +32,9 @@ spec:
         image: $REGISTRY_NAME/enrichment_completed:latest
         env:
         - name: APP_PORT
-          value: "6006"
+          value: "6005"
         ports:
-        - containerPort: 6006
+        - containerPort: 6005
         imagePullPolicy: Always
 ---
 apiVersion: v1

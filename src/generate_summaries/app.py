@@ -11,7 +11,7 @@ from azure.core.exceptions import AzureError
 
 dapr_client = DaprClient()
 app = Flask(__name__)
-app_port = os.getenv("APP_PORT", "6005")
+app_port = os.getenv("APP_PORT", "6004")
 
 source_topic = "generate-summaries"
 destination_topic = "enrichment-completed"

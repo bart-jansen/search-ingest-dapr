@@ -17,7 +17,7 @@ spec:
         # https://docs.dapr.io/reference/arguments-annotations-overview/
         dapr.io/enabled: "true"
         dapr.io/app-id: "generate-summaries"
-        dapr.io/app-port: "6005"
+        dapr.io/app-port: "6004"
         dapr.io/config: "appconfig"
         dapr.io/enable-api-logging: "true"
         dapr.io/log-as-json: "true"
@@ -32,9 +32,9 @@ spec:
         image: $REGISTRY_NAME/generate_summaries:latest
         env:
         - name: APP_PORT
-          value: "6005"
+          value: "6004"
         ports:
-        - containerPort: 6005
+        - containerPort: 6004
         imagePullPolicy: Always
 ---
 apiVersion: v1
