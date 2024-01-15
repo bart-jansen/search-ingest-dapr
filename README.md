@@ -4,8 +4,7 @@ End-to-end search ingestion pipeline that takes PDF documents from a folder in b
 
 ## Overview
 
-<!-- img of dapr-overview.png -->
-![Dapr overview](dapr.drawio.png)
+![Dapr overview](dapr-search-overview.drawio.svg)
 
 ## Deploy resources
 

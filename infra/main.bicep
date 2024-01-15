@@ -15,8 +15,8 @@ param aksDiskSizeGB int = 30
 param aksNodeCount int = 2
 
 @description('The size of the Virtual Machine nodes in the AKS cluster')
-param aksVMSize string = 'Standard_B2s'
-// param aksVMSize string = 'Standard_D2s_v3'
+// param aksVMSize string = 'Standard_B2s'
+param aksVMSize string = 'Standard_D2s_v3'
 
 @description('The Service Bus SKU to use')
 param serviceBusSku string = 'Standard'
