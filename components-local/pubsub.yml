@@ -1,0 +1,22 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: pubsub
+spec:
+  type: pubsub.azure.servicebus.topics
+  version: v1
+  metadata:
+  - name: connectionString
+    secretKeyRef:
+      name: SERVICE_BUS_CONNECTION_STRING
+      key: SERVICE_BUS_CONNECTION_STRING
+  - name: lockDurationInSec
+    value: 300
+  - name: handlerTimeoutInSec
+    value: 300
+  - name: maxConcurrentHandlers
+    value: 50
+  - name: maxActiveMessages
+    value: 250
+auth:
+  secretStore: secretstore

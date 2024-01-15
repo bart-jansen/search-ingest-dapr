@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: process-document
+  labels:
+    app: process-document
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: process-document
+  template:
+    metadata:
+      labels:
+        app: process-document
+      annotations:
+        # https://docs.dapr.io/reference/arguments-annotations-overview/
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "process-document"
+        dapr.io/app-port: "6002"
+        dapr.io/config: "appconfig"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/log-as-json: "true"
+        dapr.io/log-level: "debug"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/"
+    spec:
+      serviceAccountName: process-document
+      containers:
+      - name: process-document
+        image: $REGISTRY_NAME/process_document:latest
+        env:
+        - name: APP_PORT
+          value: "6002"
+        ports:
+        - containerPort: 6002
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: process-document
+  namespace: default

@@ -1,0 +1,47 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: secret-reader
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dapr-secret-reader
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: secret-reader
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: default
+- kind: ServiceAccount
+  name: batcher
+  namespace: default
+- kind: ServiceAccount
+  name: document-completed
+  namespace: default
+- kind: ServiceAccount
+  name: enrichment-completed
+  namespace: default
+- kind: ServiceAccount
+  name: extract-document
+  namespace: default
+- kind: ServiceAccount
+  name: generate-embeddings
+  namespace: default
+- kind: ServiceAccount
+  name: generate-keyphrases
+  namespace: default
+- kind: ServiceAccount
+  name: generate-summaries
+  namespace: default
+- kind: ServiceAccount
+  name: process-document
+  namespace: default

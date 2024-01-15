@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: enrichment-completed
+  labels:
+    app: enrichment-completed
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: enrichment-completed
+  template:
+    metadata:
+      labels:
+        app: enrichment-completed
+      annotations:
+        # https://docs.dapr.io/reference/arguments-annotations-overview/
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "enrichment-completed"
+        dapr.io/app-port: "6006"
+        dapr.io/config: "appconfig"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/log-as-json: "true"
+        dapr.io/log-level: "debug"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/"
+    spec:
+      serviceAccountName: enrichment-completed
+      containers:
+      - name: enrichment-completed
+        image: $REGISTRY_NAME/enrichment_completed:latest
+        env:
+        - name: APP_PORT
+          value: "6006"
+        ports:
+        - containerPort: 6006
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: enrichment-completed
+  namespace: default

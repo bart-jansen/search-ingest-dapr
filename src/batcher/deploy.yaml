@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batcher
+  labels:
+    app: batcher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: batcher
+  template:
+    metadata:
+      labels:
+        app: batcher
+      annotations:
+        # https://docs.dapr.io/reference/arguments-annotations-overview/
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "batcher"
+        dapr.io/app-port: "6000"
+        dapr.io/config: "appconfig"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/log-as-json: "true"
+        dapr.io/log-level: "debug"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/"
+    spec:
+      serviceAccountName: batcher
+      containers:
+      - name: batcher
+        image: $REGISTRY_NAME/batcher:latest
+        env:
+        - name: APP_PORT
+          value: "6000"
+        ports:
+        - containerPort: 6000
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: batcher
+  namespace: default

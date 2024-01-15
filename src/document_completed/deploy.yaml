@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: document-completed
+  labels:
+    app: document-completed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: document-completed
+  template:
+    metadata:
+      labels:
+        app: document-completed
+      annotations:
+        # https://docs.dapr.io/reference/arguments-annotations-overview/
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "document-completed"
+        dapr.io/app-port: "6007"
+        dapr.io/config: "appconfig"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/log-as-json: "true"
+        dapr.io/log-level: "debug"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/"
+    spec:
+      serviceAccountName: document-completed
+      containers:
+      - name: document-completed
+        image: $REGISTRY_NAME/document_completed:latest
+        env:
+        - name: APP_PORT
+          value: "6007"
+        ports:
+        - containerPort: 6007
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: document-completed
+  namespace: default

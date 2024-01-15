@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: generate-summaries
+  labels:
+    app: generate-summaries
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: generate-summaries
+  template:
+    metadata:
+      labels:
+        app: generate-summaries
+      annotations:
+        # https://docs.dapr.io/reference/arguments-annotations-overview/
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "generate-summaries"
+        dapr.io/app-port: "6005"
+        dapr.io/config: "appconfig"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/log-as-json: "true"
+        dapr.io/log-level: "debug"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/"
+    spec:
+      serviceAccountName: generate-summaries
+      containers:
+      - name: generate-summaries
+        image: $REGISTRY_NAME/generate_summaries:latest
+        env:
+        - name: APP_PORT
+          value: "6005"
+        ports:
+        - containerPort: 6005
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: generate-summaries
+  namespace: default

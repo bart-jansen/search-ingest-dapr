@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: generate-embeddings
+  labels:
+    app: generate-embeddings
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: generate-embeddings
+  template:
+    metadata:
+      labels:
+        app: generate-embeddings
+      annotations:
+        # https://docs.dapr.io/reference/arguments-annotations-overview/
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "generate-embeddings"
+        dapr.io/app-port: "6003"
+        dapr.io/config: "appconfig"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/log-as-json: "true"
+        dapr.io/log-level: "debug"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/"
+    spec:
+      serviceAccountName: generate-embeddings
+      containers:
+      - name: generate-embeddings
+        image: $REGISTRY_NAME/generate_embeddings:latest
+        env:
+        - name: APP_PORT
+          value: "6003"
+        ports:
+        - containerPort: 6003
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: generate-embeddings
+  namespace: default

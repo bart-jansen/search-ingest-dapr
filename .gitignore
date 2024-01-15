@@ -1,0 +1,15 @@
+__pycache__
+.DS_Store
+
+dist
+
+.dapr
+
+azuredeploy.parameters.json
+output.json
+output.bak
+
+*.secret.*
+secrets.json
+
+.env

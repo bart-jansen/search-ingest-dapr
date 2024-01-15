@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: extract-document
+  labels:
+    app: extract-document
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: extract-document
+  template:
+    metadata:
+      labels:
+        app: extract-document
+      annotations:
+        # https://docs.dapr.io/reference/arguments-annotations-overview/
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "extract-document"
+        dapr.io/app-port: "6001"
+        dapr.io/config: "appconfig"
+        dapr.io/enable-api-logging: "true"
+        dapr.io/log-as-json: "true"
+        dapr.io/log-level: "debug"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/"
+    spec:
+      serviceAccountName: extract-document
+      containers:
+      - name: extract-document
+        image: $REGISTRY_NAME/extract_document:latest
+        env:
+        - name: APP_PORT
+          value: "6001"
+        - name: INSTRUMENTATION_KEY
+          value: "80b531cc-543d-40ea-bc25-f0692b973771"
+        ports:
+        - containerPort: 6001
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: extract-document
+  namespace: default

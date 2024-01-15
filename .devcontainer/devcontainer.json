@@ -1,0 +1,49 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"name": "dapr-ingest",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"build": {
+		// Path is relataive to the devcontainer.json file.
+		"dockerfile": "Dockerfile"
+	},
+	"features": {
+		"ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
+		"ghcr.io/dapr/cli/dapr-cli:0": {},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		"ghcr.io/devcontainers/features/node:1": {},
+		"ghcr.io/guiyomh/features/just": {},
+		"ghcr.io/devcontainers/features/azure-cli:1": { "installBicep": true },
+		"ghcr.io/stuartleeks/dev-container-features/azure-cli-persistence:0": {},
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+			"helm": "3.10.1"
+		},
+		"ghcr.io/devcontainers-contrib/features/kubectx-kubens:1": {},
+		"ghcr.io/devcontainers/features/python": {
+			"installTools": true,
+			"version": "3.11"
+		}
+	}
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	,"forwardPorts": [3000, 5001,6379]
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	,"postCreateCommand": ".devcontainer/post-create.sh",
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-azuretools.vscode-bicep",
+				"ms-azuretools.vscode-dapr",
+				"ms-python.black-formatter",
+				"humao.rest-client",
+				"yzhang.markdown-all-in-one"
+			]
+		}
+	},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

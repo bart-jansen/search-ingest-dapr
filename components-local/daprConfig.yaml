@@ -1,0 +1,15 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: daprConfig
+  namespace: default
+spec:
+  tracing:
+    samplingRate: "1"
+    stdout: true
+    # otel:
+    #   endpointAddress: "host.docker.internal:4317"
+    #   isSecure: false
+    #   protocol: grpc 
+    zipkin:
+      endpointAddress: "http://host.docker.internal:9411/api/v2/spans"
