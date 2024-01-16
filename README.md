@@ -10,6 +10,20 @@ End-to-end search ingestion pipeline that takes PDF documents from a folder in b
 
 To deploy all resources, copy `sample.env` to `.env` and update the values. Then run  `./deploy.sh`.
 
+The included `./infra/main.bicep` deploys:
+- AKS cluster
+- Azure Container Registry
+- Storage account
+- Service Bus
+- Azure AI Search
+- Azure Redis Cache
+- Document Intelligence (formerly Form Recognizer)
+- Azure OpenAI Service with Embedding model
+- Azure AI Language - TextAnalytics
+- Application Insights 
+
+As part of the deployment script, `./scripts/create-env-files-from-secrets.sh` populates the infra output as secrets for your local development (in ``./secrets.json``) and product environment in `./components-k8s/*.secret.yaml`. These secrets are automatically added to the Dapr components and applications.
+
 > Before you start, upload some PDFs in your blob storage with the specified `source_folder_path` e.g. in `/content/PDFs/` when using the path above
 
 ## Running the project locally
