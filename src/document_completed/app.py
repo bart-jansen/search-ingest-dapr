@@ -8,6 +8,7 @@ from azure.storage.blob import BlobServiceClient
 from cloudevents.http import from_http
 from dapr.clients import DaprClient, DaprInternalError
 
+
 dapr_client = DaprClient()
 app = Flask(__name__)
 app_port = os.getenv("APP_PORT", "6006")
@@ -16,11 +17,6 @@ source_topic = "document-completed"
 pubsub_name = "pubsub"
 store_name = "statestore"
 secret_store = "secretstore"
-
-azure_blob_connection_string = dapr_client.get_secret(store_name=secret_store, key="secretstore").secret["AZURE_BLOB_CONNECTION_STRING"]
-blob_container_name = dapr_client.get_secret(store_name=secret_store, key="secretstore").secret["BLOB_CONTAINER_NAME"]
-search_service = dapr_client.get_secret(store_name=secret_store, key="secretstore").secret["SEARCH_SERVICE"]
-search_key = dapr_client.get_secret(store_name=secret_store, key="secretstore").secret["SEARCH_KEY"]
 
 # update state with transactions/etag to avoid conflicts
 @retry(stop=stop_after_attempt(3), wait=wait_random_exponential(multiplier=1, max=10),
@@ -42,7 +38,7 @@ def delete_blobs_with_prefix(container_client, prefix):
     print(f"🗑️ Deleted {blob_count} blobs with prefix {prefix}", flush=True)
 
 
-def cleanup_blob(status, blob_container_name, searchitems_folder_path):
+def cleanup_blob(status, azure_blob_connection_string, blob_container_name, searchitems_folder_path):
     print("Indexing completed with status:", status.last_result.status)
 
     blob_service_client = BlobServiceClient.from_connection_string(azure_blob_connection_string)
@@ -53,13 +49,18 @@ def cleanup_blob(status, blob_container_name, searchitems_folder_path):
 
     print("🏁🏁🏁Successfully indexed and cleaned up.", flush=True)
 
-def start_indexer(blob_container_name, searchitems_folder_path, searchindexer_name):
+def start_indexer(searchitems_folder_path, searchindexer_name):
+    blob_connection_string = dapr_client.get_secret(store_name=secret_store, key="secretstore").secret["AZURE_BLOB_CONNECTION_STRING"]
+    blob_container_name = dapr_client.get_secret(store_name=secret_store, key="secretstore").secret["BLOB_CONTAINER_NAME"]
+    search_service = dapr_client.get_secret(store_name=secret_store, key="secretstore").secret["SEARCH_SERVICE"]
+    search_key = dapr_client.get_secret(store_name=secret_store, key="secretstore").secret["SEARCH_KEY"]
+
     # Create an instance of AzureSearchIndex
     azure_search_index = AzureSearchIndex(
         service_name = search_service, 
-        search_key = search_key, 
-        blob_connection_string = azure_blob_connection_string, 
-        blob_container = blob_container_name, 
+        search_key = search_key,
+        blob_connection_string = blob_connection_string,
+        blob_container = blob_container_name,
         blob_items_folder = searchitems_folder_path
     )
 
@@ -69,7 +70,7 @@ def start_indexer(blob_container_name, searchitems_folder_path, searchindexer_na
     azure_search_index.create_indexer(searchindexer_name, f"{searchindexer_name}-ds", f"{searchindexer_name}-index")
 
     def cleanup_blob_wrapper(status):
-        cleanup_blob(status, blob_container_name, searchitems_folder_path)
+        cleanup_blob(status, blob_connection_string, blob_container_name, searchitems_folder_path)
 
     azure_search_index.run_indexer(searchindexer_name, cleanup_blob_wrapper)
 
@@ -118,7 +119,6 @@ def document_completed_subscriber():
         print(f"🏁Fully processed document: {doc_id}, total remaining documents {document_size}", flush=True)
         # start indexer
         start_indexer(
-            blob_container_name, 
             ingestion_data['searchitems_folder_path'], 
             ingestion_data['searchindexer_name']
         )
